@@ -220,11 +220,14 @@ function ask(){
 function countUp(el,target){
   if(RM){ el.textContent=target; return; }
   const t0=performance.now(), from=1960+Math.floor(Math.random()*60);
+  const done=()=>{ el.textContent=target; };
   (function tick(now){
     const k=Math.min(1,(now-t0)/460);
     el.textContent=Math.round(from+(target-from)*(1-Math.pow(1-k,3)));
-    if(k<1) requestAnimationFrame(tick); else el.textContent=target;
+    if(k<1) requestAnimationFrame(tick); else done();
   })(t0);
+  // 탭이 가려지면 rAF가 멈춰 중간 숫자에서 굳는다. 연도가 틀리게 보이면 안 되므로 최종값을 따로 보장한다.
+  setTimeout(done,600);
 }
 
 function praise(n){
