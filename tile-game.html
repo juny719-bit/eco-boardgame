@@ -1,0 +1,205 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>기록 타일</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gothic+A1:wght@400;500;700;800;900&display=swap">
+<style>
+:root{
+  --ink:#14120c;--paper:#f6f1e2;--surface:#fffdf6;--edge:#14120c;--muted:#6e6858;
+  --yellow:#ffe95a;--green:#57c97a;--red:#ff5a4e;--shadow:#14120c;
+  --display:"Black Han Sans","Gothic A1","Malgun Gothic",sans-serif;
+  --body:"Gothic A1","Malgun Gothic",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--ink:#f5f0e0;--paper:#15140e;--surface:#221f16;--edge:#f5f0e0;--muted:#9c947e;--shadow:#000}
+}
+:root[data-theme="dark"]{--ink:#f5f0e0;--paper:#15140e;--surface:#221f16;--edge:#f5f0e0;--muted:#9c947e;--shadow:#000}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:15px;
+  line-height:1.5;padding-inline:14px;padding-block:16px 34px}
+.wrap{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:13px}
+.hard{border:3px solid var(--edge);box-shadow:5px 5px 0 var(--shadow)}
+
+.top{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(1.35rem,4.6vw,2rem);margin:0;line-height:1}
+.top .sp{flex:1}
+.nav{font-size:.78rem;font-weight:700;color:var(--ink);text-decoration:none;
+  border:2px solid var(--edge);padding:3px 10px;background:var(--surface)}
+.nav:hover{background:var(--yellow);color:#14120c}
+.sb{background:var(--surface);border:3px solid var(--edge);padding:3px 11px;font-weight:700;
+  font-size:.8rem;display:flex;align-items:center;gap:6px;box-shadow:3px 3px 0 var(--shadow)}
+.sb b{font-family:var(--display);font-weight:400;font-size:1.2rem;font-variant-numeric:tabular-nums}
+.sb.hit{background:var(--yellow);color:#14120c}
+.lead{margin:0;font-size:.87rem;color:var(--muted)}
+
+/* 뽑은 카드 */
+.card{display:grid;grid-template-columns:168px 1fr;background:var(--surface);overflow:hidden;min-height:132px}
+@media(max-width:560px){.card{grid-template-columns:110px 1fr}}
+.card img{width:100%;height:100%;object-fit:cover;display:block;border-right:3px solid var(--edge);background:var(--paper)}
+.card .tx{padding:11px 14px;display:flex;flex-direction:column;gap:6px;justify-content:center;min-width:0}
+.card .no{font-size:.66rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.card .yr{font-family:var(--display);font-weight:400;font-size:1.9rem;line-height:1;font-variant-numeric:tabular-nums}
+.card .nm{font-weight:700;font-size:1.05rem;line-height:1.28;text-wrap:balance}
+.card .ask{font-size:.82rem;color:var(--muted)}
+
+/* 타일 */
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+@media(max-width:430px){.tiles{gap:6px}}
+.tile{border:3px solid var(--edge);box-shadow:4px 4px 0 var(--shadow);background:var(--surface);
+  padding:10px 6px 9px;cursor:pointer;font:inherit;display:flex;flex-direction:column;
+  align-items:center;gap:5px;transition:transform .1s;min-width:0}
+.tile:hover:not(:disabled){transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--shadow)}
+.tile:active:not(:disabled){transform:translate(2px,2px);box-shadow:1px 1px 0 var(--shadow)}
+.tile:disabled{cursor:default}
+.tile:focus-visible{outline:3px solid var(--yellow);outline-offset:3px}
+.tile svg{width:30px;height:30px;flex:none}
+.tile .nm{font-size:.86rem;font-weight:800;line-height:1.2;text-align:center;word-break:keep-all}
+.tile .n{font-size:.66rem;font-weight:700;color:var(--muted)}
+.tile.ok{border-color:var(--green);box-shadow:4px 4px 0 var(--green)}
+.tile.bad{border-color:var(--red);box-shadow:4px 4px 0 var(--red)}
+
+/* 피드백 */
+.fb{background:var(--surface);padding:10px 13px;display:flex;flex-direction:column;gap:5px;min-height:78px}
+.fb .v{font-family:var(--display);font-weight:400;font-size:1.2rem;line-height:1.1}
+.fb .v.ok{color:#1f8a45}.fb .v.bad{color:#c9372c}
+:root[data-theme="dark"] .fb .v.ok,:root:not([data-theme="light"]) .fb .v.ok{color:#7fe09e}
+:root[data-theme="dark"] .fb .v.bad,:root:not([data-theme="light"]) .fb .v.bad{color:#ff8e84}
+.fb p{margin:0;font-size:.81rem;color:var(--muted);line-height:1.5}
+.fb a{color:var(--ink);font-weight:700;font-size:.77rem}
+.fb .go{align-self:flex-start;margin-top:3px;font-family:var(--display);font-weight:400;font-size:1rem;
+  border:3px solid var(--edge);background:var(--yellow);color:#14120c;padding:6px 18px;cursor:pointer;box-shadow:3px 3px 0 var(--shadow)}
+.fb .go:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--shadow)}
+
+.over{background:var(--yellow);color:#14120c;padding:15px;display:flex;flex-direction:column;gap:7px}
+.over[hidden]{display:none}
+.over h2{font-family:var(--display);font-weight:400;font-size:1.6rem;margin:0;line-height:1.1}
+.over p{margin:0;font-size:.87rem}
+.over button{align-self:flex-start;font-family:var(--display);font-weight:400;font-size:1.1rem;
+  border:3px solid #14120c;background:#fffdf6;color:#14120c;padding:7px 20px;cursor:pointer;box-shadow:4px 4px 0 #14120c}
+footer{font-size:.71rem;color:var(--muted);line-height:1.6;border-top:2px dotted var(--muted);padding-top:10px}
+footer a{color:var(--muted)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body>
+<div class="wrap">
+  <div class="top">
+    <h1>기록 타일</h1>
+    <a class="nav" href="./">← 게임 목록</a>
+    <span class="sp"></span>
+    <span class="sb">문제 <b id="turn">1</b>/15</span>
+    <span class="sb hit">맞힘 <b id="hit">0</b></span>
+  </div>
+  <p class="lead">사건 카드를 한 장 뽑았습니다. 이 사건은 <b>어느 주제</b>일까요? 타일을 눌러 카드를 올리면 바로 정답을 알려드립니다. 15문제를 풉니다.</p>
+
+  <div class="card hard" id="card"></div>
+  <div class="tiles" id="tiles"></div>
+  <div class="fb hard" id="fb"><span class="v" id="fbv">타일을 고르세요.</span><p id="fbp">카드의 사진과 사건명만 보고 주제를 짐작하면 됩니다.</p></div>
+  <div class="over hard" id="over" hidden></div>
+
+  <footer>
+    데이터: 재단법인 숲과나눔 <a href="https://ecoarchive.org" target="_blank" rel="noopener">환경아카이브 풀숲</a> ·
+    <a href="https://archivelabedu.github.io/ecoarchive-impact2026/" target="_blank" rel="noopener">풀숲 데이터 랩</a> (CC BY 4.0).
+    주제 분류는 풀숲이 각 기록에 부여한 값입니다.
+    인쇄해서 여럿이 하려면 <a href="board/tile-board.html">A4 보드</a>를 쓰세요.
+  </footer>
+</div>
+
+<script>
+const BASE="https://archivelabedu.github.io/ecoarchive-impact2026/";
+const ROUNDS=15;
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
+const sub=c=>(c.subject&&c.subject.trim())?c.subject.trim():"미분류";
+
+const SUBJ=["생태계보전","반핵탈핵","생활안전","기후에너지","반공해","일반(정치·제도)","자원순환","대기오염","미분류"];
+const CORE={"생태계보전":"#2f6f4e","반핵탈핵":"#6f9a63","생활안전":"#b05a6c","기후에너지":"#c79a35","반공해":"#d1603f","일반(정치·제도)":"#c8823d","자원순환":"#655389","대기오염":"#4e8fa3","미분류":"#8a8371"};
+const ICON={
+ "생태계보전":'<path d="M12 21.5V11.2"/><path d="M12 11.2C12 6.2 8.2 3 3.8 3c0 5 3.8 8.2 8.2 8.2z"/><path d="M12 11.2C12 6.6 15.7 4.1 19.6 4.1c0 4.6-3.7 7.1-7.6 7.1z"/>',
+ "반핵탈핵":'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.3"/><path d="M12 9.7V3.6"/><path d="M14 13.2l5.3 3"/><path d="M10 13.2l-5.3 3"/>',
+ "생활안전":'<path d="M12 3.2l7.4 3.1v5.5c0 4.5-3 7.9-7.4 9.1-4.4-1.2-7.4-4.6-7.4-9.1V6.3z"/><path d="M9.3 12.1l2 2.1 3.5-4.1"/>',
+ "기후에너지":'<circle cx="12" cy="12" r="3.9"/><path d="M12 2.7v2.3M12 19v2.3M4.4 4.4l1.6 1.6M18 18l1.6 1.6M2.7 12H5M19 12h2.3M4.4 19.6L6 18M18 6l1.6-1.6"/>',
+ "반공해":'<path d="M3.2 20.6h17.6"/><path d="M6 20.6V9.4h4.1v11.2"/><path d="M14 20.6V4.6h4.1v16"/><path d="M8 6.6q1.9-2.1 0-4.2"/>',
+ "일반(정치·제도)":'<path d="M3.6 20.6h16.8"/><path d="M6.2 20.6V10.4M10.1 20.6V10.4M13.9 20.6V10.4M17.8 20.6V10.4"/><path d="M3.6 10.4h16.8"/><path d="M12 3.2l8.4 7.2H3.6z"/>',
+ "자원순환":'<path d="M4.5 9.8A8 8 0 0 1 18.4 7.5"/><path d="M19.5 14.2A8 8 0 0 1 5.6 16.5"/><path d="M18.7 3.4v4.3h-4.3"/><path d="M5.3 20.6v-4.3h4.3"/>',
+ "대기오염":'<path d="M7.2 15.6a3.9 3.9 0 0 1 .5-7.7 5.3 5.3 0 0 1 10 1.4 3.3 3.3 0 0 1-.8 6.3z"/><path d="M4.6 19.2h6M13.2 19.2h6.2"/>',
+ "미분류":'<path d="M8.4 9.1a3.7 3.7 0 0 1 7.3.6c0 1.3-.6 2-1.6 2.8-1 .7-2.1 1.5-2.1 3.3v.8"/><circle cx="12" cy="20.2" r="1"/>'
+};
+
+let DECK=[], CNT={}, S=null, busy=false;
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+
+function drawTiles(){
+  $("tiles").innerHTML=SUBJ.map((k,i)=>
+    '<button class="tile" type="button" id="t'+i+'" data-k="'+esc(k)+'" aria-label="'+esc(k)+' 타일에 올리기">'+
+      '<svg viewBox="0 0 24 24" fill="none" stroke="'+CORE[k]+'" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">'+ICON[k]+'</svg>'+
+      '<span class="nm">'+esc(k)+'</span>'+
+      '<span class="n">카드 '+(CNT[k]||0)+'장</span>'+
+    '</button>').join("");
+  SUBJ.forEach((k,i)=>$("t"+i).addEventListener("click",()=>pick(k)));
+}
+
+function newGame(){
+  S={pool:shuffle(DECK).slice(0,ROUNDS),turn:0,hit:0,cur:null,over:false};
+  $("over").hidden=true;
+  next();
+}
+
+function next(){
+  document.querySelectorAll(".fb .go").forEach(b=>b.remove());
+  SUBJ.forEach((k,i)=>{const t=$("t"+i);t.className="tile";t.disabled=false;});
+  S.cur=S.pool[S.turn];
+  $("turn").textContent=Math.min(S.turn+1,ROUNDS);
+  $("hit").textContent=S.hit;
+  const c=S.cur;
+  $("card").innerHTML='<img src="'+BASE+'games/'+c.image+'" alt="" decoding="async">'+
+    '<div class="tx"><span class="no">뽑은 카드 '+(S.turn+1)+' / '+ROUNDS+'</span>'+
+    '<span class="yr">'+c.year+'</span><span class="nm">'+esc(c.front)+'</span>'+
+    '<span class="ask">이 사건은 어느 주제일까요?</span></div>';
+  $("fb").className="fb hard";
+  $("fbv").className="v"; $("fbv").textContent="타일을 고르세요.";
+  $("fbp").textContent="카드의 사진과 사건명만 보고 주제를 짐작하면 됩니다.";
+  busy=false;
+}
+
+function pick(k){
+  if(busy||S.over) return;
+  busy=true;
+  const c=S.cur, ans=sub(c), ok=(k===ans);
+  SUBJ.forEach((s,i)=>{
+    const t=$("t"+i); t.disabled=true;
+    if(s===ans) t.classList.add("ok");
+    else if(s===k) t.classList.add("bad");
+  });
+  if(ok) S.hit++;
+  $("hit").textContent=S.hit;
+
+  $("fbv").className="v "+(ok?"ok":"bad");
+  $("fbv").textContent=ok?"맞았습니다 — "+ans:"아쉽네요 — 정답은 "+ans;
+  $("fbp").innerHTML=esc((c.back||"").slice(0,130))+((c.back||"").length>130?"…":"")+
+    ' <a href="'+c.url+'" target="_blank" rel="noopener">풀숲 원본 ↗</a>';
+
+  S.turn++;
+  const b=document.createElement("button");
+  b.className="go"; b.type="button";
+  b.textContent=S.turn>=ROUNDS?"결과 보기":"다음 카드";
+  b.addEventListener("click",()=>{ S.turn>=ROUNDS?finish():next(); });
+  $("fb").appendChild(b); b.focus();
+}
+
+function finish(){
+  S.over=true;
+  const pct=Math.round(S.hit/ROUNDS*100);
+  $("over").hidden=false;
+  $("over").innerHTML="<h2>"+(pct>=80?"훌륭합니다!":pct>=50?"괜찮은데요":"다시 해볼까요")+"</h2>"+
+    "<p>15문제 중 <b>"+S.hit+"문제</b>를 맞혔습니다 ("+pct+"%). "+
+    "풀숲은 사건마다 주제를 하나씩 부여해 두는데, 그 분류를 얼마나 따라잡았는지가 점수입니다.</p>";
+  const b=document.createElement("button");
+  b.type="button"; b.textContent="다시 하기";
+  b.addEventListener("click",newGame);
+  $("over").appendChild(b); b.focus();
+}
+
+fetch(BASE+"data/cards.json").then(r=>r.json()).then(cs=>{
+  DECK=cs.filter(c=>c.type==="event"&&c.year&&c.image);
+  CNT={}; DECK.forEach(c=>{const s=sub(c);CNT[s]=(CNT[s]||0)+1;});
+  drawTiles(); newGame();
+});
+</script></body></html>
