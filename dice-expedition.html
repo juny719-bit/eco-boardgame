@@ -1,0 +1,304 @@
+<title>기록 원정대</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gothic+A1:wght@400;500;700;900&display=swap">
+<style>
+:root{
+  --ink:#14120c; --paper:#f6f1e2; --surface:#fffdf6; --edge:#14120c; --muted:#6e6858;
+  --yellow:#ffe95a; --blue:#9ee6ff; --gold:#ffb43d; --green:#b8f2a0; --shadow:#14120c;
+  --display:"Black Han Sans","Gothic A1","Malgun Gothic",sans-serif;
+  --body:"Gothic A1","Malgun Gothic",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--ink:#f5f0e0;--paper:#15140e;--surface:#221f16;--edge:#f5f0e0;--muted:#9c947e;--shadow:#000}
+}
+:root[data-theme="dark"]{--ink:#f5f0e0;--paper:#15140e;--surface:#221f16;--edge:#f5f0e0;--muted:#9c947e;--shadow:#000}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);
+  font-size:15px;line-height:1.5;padding-inline:14px;padding-block:16px 34px}
+.wrap{max-width:960px;margin:0 auto;display:flex;flex-direction:column;gap:13px}
+.hard{border:3px solid var(--edge);box-shadow:5px 5px 0 var(--shadow)}
+
+h1{font-family:var(--display);font-weight:400;font-size:clamp(1.35rem,4.6vw,2rem);margin:0;line-height:1}
+.top{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.top .sp{flex:1}
+.sb{background:var(--surface);padding:4px 12px;font-weight:700;font-size:.8rem;display:flex;align-items:center;gap:7px}
+.sb b{font-family:var(--display);font-weight:400;font-size:1.25rem;font-variant-numeric:tabular-nums}
+.sb.me{background:var(--yellow);color:#14120c}
+.sb.ai{background:var(--blue);color:#14120c}
+.nav{font-size:.78rem;font-weight:700;color:var(--ink);text-decoration:none;
+  border:2px solid var(--edge);padding:3px 10px;background:var(--surface)}
+.nav:hover{background:var(--yellow);color:#14120c}
+
+/* 소개 */
+.intro{display:flex;flex-direction:column;gap:10px}
+.lede{margin:0;font-size:.92rem;line-height:1.62;max-width:68ch}
+.lede a{color:var(--ink)}
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+@media(max-width:620px){.how{grid-template-columns:1fr}}
+.step{background:var(--surface);border:3px solid var(--edge);box-shadow:4px 4px 0 var(--shadow);
+  padding:9px 12px;display:flex;gap:10px;align-items:flex-start;font-size:.84rem;line-height:1.42}
+.step b{font-family:var(--display);font-weight:400;font-size:1.35rem;line-height:.95;color:var(--muted);flex:none}
+.win{margin:0;font-size:.85rem;font-weight:700}
+.why{background:var(--surface);border:3px solid var(--edge);border-left:10px solid var(--gold);
+  box-shadow:4px 4px 0 var(--shadow);padding:10px 13px;font-size:.83rem;line-height:1.58;color:var(--muted)}
+.why b{color:var(--ink)}
+
+/* 말판 */
+.board{display:grid;grid-template-columns:repeat(9,1fr);gap:4px;background:var(--surface);padding:7px}
+.cell{position:relative;aspect-ratio:1;border:2px solid var(--edge);background:var(--paper);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;overflow:hidden;min-width:0}
+.cell .y{font-size:clamp(8px,1.5vw,11px);font-weight:700;font-variant-numeric:tabular-nums;line-height:1}
+.cell .st{display:flex;gap:1px}
+.cell .st i{width:4px;height:4px;border-radius:50%;background:var(--muted);display:block}
+.cell.s3{background:var(--gold)}
+.cell.s3 .y{color:#14120c}.cell.s3 .st i{background:#14120c}
+.cell.s2{background:var(--green)}
+.cell.s2 .y{color:#14120c}.cell.s2 .st i{background:#14120c}
+.cell.fin{background:var(--edge)}
+.cell.fin .y{color:var(--paper)}
+.pawns{position:absolute;inset:auto 0 1px 0;display:flex;justify-content:center;gap:2px}
+.pw{width:9px;height:9px;border-radius:50%;border:2px solid var(--edge)}
+.pw.me{background:#ffd400}.pw.ai{background:#3fb8e0}
+.cell.hit{outline:3px solid var(--gold);outline-offset:-3px}
+
+/* 주사위 */
+.roll{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}
+.die{font-family:var(--display);font-weight:400;font-size:2.1rem;line-height:1;
+  border:3px solid var(--edge);background:var(--surface);color:var(--ink);
+  width:76px;height:76px;cursor:pointer;box-shadow:4px 4px 0 var(--shadow);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
+.die small{font-family:var(--body);font-size:.58rem;font-weight:700;color:var(--muted)}
+.die:hover:not(:disabled){background:var(--yellow);color:#14120c}
+.die:hover:not(:disabled) small{color:#14120c}
+.die:active:not(:disabled){transform:translate(3px,3px);box-shadow:1px 1px 0 var(--shadow)}
+.die:disabled{opacity:.35;cursor:default}
+.die:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.go{font-family:var(--display);font-weight:400;font-size:1.25rem;border:3px solid var(--edge);
+  background:var(--yellow);color:#14120c;padding:0 26px;cursor:pointer;box-shadow:4px 4px 0 var(--shadow)}
+.go:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--shadow)}
+.go:disabled{opacity:.35;cursor:default}
+.hint{align-self:center;font-size:.82rem;color:var(--muted);flex:1;min-width:160px}
+
+/* 카드 */
+.card{display:grid;grid-template-columns:150px 1fr;gap:0;background:var(--surface);overflow:hidden;min-height:126px}
+@media(max-width:560px){.card{grid-template-columns:104px 1fr}}
+.card img{width:100%;height:100%;object-fit:cover;display:block;border-right:3px solid var(--edge)}
+.card .tx{padding:10px 13px;display:flex;flex-direction:column;gap:5px;min-width:0}
+.card .hd{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+.card .yr{font-family:var(--display);font-weight:400;font-size:1.5rem;line-height:1;font-variant-numeric:tabular-nums}
+.card .nm{font-weight:700;font-size:.97rem;line-height:1.25}
+.card .stars{font-family:var(--display);font-weight:400;font-size:1.05rem;color:#c98207;letter-spacing:1px}
+.card p{margin:0;font-size:.79rem;color:var(--muted);line-height:1.5}
+.card a{color:var(--ink);font-weight:700;font-size:.76rem}
+.card.empty{align-items:center;justify-content:center;grid-template-columns:1fr;padding:18px;text-align:center;color:var(--muted);font-size:.86rem}
+
+.over{background:var(--yellow);color:#14120c;padding:15px;display:flex;flex-direction:column;gap:7px}
+.over[hidden]{display:none}
+.over h2{font-family:var(--display);font-weight:400;font-size:1.6rem;margin:0;line-height:1.1}
+.over p{margin:0;font-size:.87rem}
+.over button{align-self:flex-start;font-family:var(--display);font-weight:400;font-size:1.1rem;
+  border:3px solid #14120c;background:#fffdf6;color:#14120c;padding:7px 20px;cursor:pointer;box-shadow:4px 4px 0 #14120c}
+footer{font-size:.71rem;color:var(--muted);line-height:1.6;border-top:2px dotted var(--muted);padding-top:10px}
+footer a{color:var(--muted)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="wrap">
+  <div class="top">
+    <h1>기록 원정대</h1>
+    <a class="nav" href="./">← 게임 목록</a>
+    <span class="sp"></span>
+    <span class="sb">턴 <b id="turn">1</b>/10</span>
+    <span class="sb me">나 ★<b id="sMe">0</b></span>
+    <span class="sb ai">상대 ★<b id="sAi">0</b></span>
+  </div>
+  <div class="intro">
+    <p class="lede">재단법인 숲과나눔 <a href="https://ecoarchive.org" target="_blank" rel="noopener">환경아카이브 풀숲</a>이 소장한 한국 환경운동 사건 기록 <b>45건(1978–2019)</b>으로 만든 주사위 말판 게임입니다. 온산병 사태에서 시작해 기후위기 대응까지, 40년을 한 판에 지나갑니다. 상대와 둘이서, 10분.</p>
+
+    <div class="how">
+      <div class="step"><b>1</b><span>주사위 <b>두 개</b>를 굴립니다.</span></div>
+      <div class="step"><b>2</b><span><b>둘 중 하나</b>를 골라 그만큼 전진합니다.</span></div>
+      <div class="step"><b>3</b><span>멈춘 칸의 사건 기록을 가져가고 <b>별</b>만큼 점수를 얻습니다.</span></div>
+    </div>
+
+    <p class="win">10턴 뒤 별이 많은 쪽이 승리합니다. 2019까지 완주하면 별 5개 보너스.</p>
+
+    <div class="why"><b>칸의 별은 지어낸 숫자가 아닙니다.</b> 그 사건에 실제로 남아 있는 기록 수입니다 — <b>★★★</b> 500건 이상(6칸) · <b>★★</b> 100–499건(21칸) · <b>★</b> 100건 미만(18칸). 그래서 금색 칸 여섯은 한국 환경운동에서 기록이 가장 많이 남은 사건들입니다. 큰 눈으로 멀리 갈지, 작은 눈으로 금색 칸에 정확히 멈출지가 매 턴 갈립니다.</div>
+  </div>
+
+  <div class="board hard" id="board"></div>
+
+  <div class="roll">
+    <button class="go" id="btnRoll" type="button">주사위 굴리기</button>
+    <button class="die" id="d1" type="button" disabled>–<small>선택</small></button>
+    <button class="die" id="d2" type="button" disabled>–<small>선택</small></button>
+    <span class="hint" id="hint">굴린 뒤 두 눈 중 하나를 고르세요.</span>
+  </div>
+
+  <div class="card hard empty" id="card">멈춘 칸의 사건 기록이 여기에 열립니다.</div>
+
+  <div class="over hard" id="over" hidden></div>
+
+  <footer>
+    데이터: 재단법인 숲과나눔 <a href="https://ecoarchive.org" target="_blank" rel="noopener">환경아카이브 풀숲</a> ·
+    <a href="https://archivelabedu.github.io/ecoarchive-impact2026/" target="_blank" rel="noopener">풀숲 데이터 랩</a> (CC BY 4.0).
+    사건 기록의 사진과 본문 권리는 각 기증주체와 재단법인 숲과나눔에 있으며, 카드에서 각 기록의 풀숲 원본으로 이동할 수 있습니다.
+  </footer>
+</div>
+
+<script>
+// 데이터는 풀숲 데이터 랩에서 직접 읽습니다 (CC BY 4.0). 카드 덱이 갱신되면 게임도 따라갑니다.
+const BASE="https://archivelabedu.github.io/ecoarchive-impact2026/";
+const TURNS=10, LAST=45, BONUS=5;
+const $=id=>document.getElementById(id);
+const RM=matchMedia("(prefers-reduced-motion:reduce)").matches;
+const star=c=>c>=500?3:c>=100?2:1;
+const esc=s=>String(s??"").replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
+const wait=ms=>new Promise(r=>setTimeout(r,RM?0:ms));
+
+let EV=[], S=null, busy=false;
+
+function newGame(){
+  S={me:{pos:0,star:0,done:false},ai:{pos:0,star:0,done:false},turn:1,dice:null,over:false};
+  $("over").hidden=true;
+  $("card").className="card hard empty";
+  $("card").textContent="멈춘 칸의 사건 기록이 여기에 열립니다.";
+  $("hint").textContent="굴린 뒤 두 눈 중 하나를 고르세요.";
+  drawBoard(); paint(); armRoll();
+}
+
+function drawBoard(){
+  let h="";
+  for(let i=0;i<LAST;i++){
+    const e=EV[i],st=star(e.count||0);
+    const cls="cell"+(st===3?" s3":st===2?" s2":"")+(i===LAST-1?" fin":"");
+    h+='<div class="'+cls+'" id="c'+i+'"><span class="y">'+e.year+'</span>'+
+       '<span class="st">'+'<i></i>'.repeat(st)+'</span><span class="pawns" id="p'+i+'"></span></div>';
+  }
+  $("board").innerHTML=h;
+}
+
+function paint(){
+  $("turn").textContent=Math.min(S.turn,TURNS);
+  $("sMe").textContent=S.me.star;
+  $("sAi").textContent=S.ai.star;
+  for(let i=0;i<LAST;i++) $("p"+i).innerHTML="";
+  if(S.me.pos>0) $("p"+(S.me.pos-1)).insertAdjacentHTML("beforeend",'<span class="pw me"></span>');
+  if(S.ai.pos>0) $("p"+(S.ai.pos-1)).insertAdjacentHTML("beforeend",'<span class="pw ai"></span>');
+}
+
+function armRoll(){
+  $("btnRoll").disabled=S.over||S.me.done;
+  $("d1").disabled=true; $("d2").disabled=true;
+  $("d1").firstChild.nodeValue="–"; $("d2").firstChild.nodeValue="–";
+  if(S.me.done&&!S.over) $("hint").textContent="이미 2019에 도착했습니다. 상대의 남은 턴을 지켜보세요.";
+}
+
+async function roll(){
+  if(busy||S.over) return;
+  busy=true; $("btnRoll").disabled=true;
+  const a=1+Math.floor(Math.random()*6), b=1+Math.floor(Math.random()*6);
+  for(let k=0;k<(RM?1:8);k++){
+    $("d1").firstChild.nodeValue=1+Math.floor(Math.random()*6);
+    $("d2").firstChild.nodeValue=1+Math.floor(Math.random()*6);
+    await wait(55);
+  }
+  $("d1").firstChild.nodeValue=a; $("d2").firstChild.nodeValue=b;
+  S.dice=[a,b];
+  $("d1").disabled=false; $("d2").disabled=false;
+  $("hint").textContent="두 눈 중 하나를 골라 그만큼 전진합니다.";
+  busy=false;
+}
+
+async function step(who,n){
+  const P=S[who];
+  for(let k=0;k<n&&P.pos<LAST;k++){ P.pos++; paint(); await wait(95); }
+  if(P.pos>LAST) P.pos=LAST;
+}
+
+async function choose(idx){
+  if(busy||S.over||S.dice===null) return;
+  busy=true;
+  $("d1").disabled=true; $("d2").disabled=true;
+  const n=S.dice[idx]; S.dice=null;
+
+  await step("me",n);
+  const e=EV[S.me.pos-1];
+  S.me.star+=star(e.count||0);
+  showCard(e,"나");
+  flash(S.me.pos-1);
+  if(S.me.pos>=LAST){ S.me.done=true; S.me.star+=BONUS; }
+  paint();
+
+  await wait(620);
+  await aiTurn();
+
+  if(S.turn>=TURNS){ finish(); } else { S.turn++; paint(); armRoll(); }
+  busy=false;
+}
+
+async function aiTurn(){
+  const A=S.ai;
+  if(A.done) return;
+  const a=1+Math.floor(Math.random()*6), b=1+Math.floor(Math.random()*6);
+  // 남은 턴으로 완주가 가능하면 큰 눈, 아니면 별이 큰 칸
+  const left=TURNS-S.turn;
+  const val=n=>{
+    const p=Math.min(LAST,A.pos+n);
+    let v=star(EV[p-1].count||0);
+    if(p>=LAST) v+=BONUS;
+    else if(left*6>=LAST-p) v+=n*0.28;
+    return v;
+  };
+  const n=val(a)>=val(b)?a:b;
+  await step("ai",n);
+  const e=EV[A.pos-1];
+  A.star+=star(e.count||0);
+  flash(A.pos-1);
+  if(A.pos>=LAST){ A.done=true; A.star+=BONUS; }
+  $("hint").textContent="상대는 "+n+"칸 이동해 "+e.year+" "+e.front+"에 멈췄습니다.";
+  paint();
+  await wait(420);
+}
+
+function flash(i){
+  const el=$("c"+i); if(!el) return;
+  el.classList.add("hit"); setTimeout(()=>el.classList.remove("hit"),780);
+}
+
+function showCard(e,who){
+  const st=star(e.count||0);
+  $("card").className="card hard";
+  $("card").innerHTML='<img src="'+BASE+'games/'+e.image+'" alt="" decoding="async">'+
+    '<div class="tx"><div class="hd"><span class="yr">'+e.year+'</span>'+
+    '<span class="nm">'+esc(e.front)+'</span>'+
+    '<span class="stars">'+"★".repeat(st)+'</span></div>'+
+    '<p>'+esc((e.back||"").slice(0,120))+((e.back||"").length>120?"…":"")+'</p>'+
+    '<p>관련 기록 '+(e.count||0).toLocaleString("ko-KR")+'건 · '+who+' 획득 ★'+st+
+    ' <a href="'+e.url+'" target="_blank" rel="noopener">풀숲 원본 ↗</a></p></div>';
+}
+
+function finish(){
+  S.over=true;
+  $("btnRoll").disabled=true; $("d1").disabled=true; $("d2").disabled=true;
+  const m=S.me.star,a=S.ai.star;
+  $("over").hidden=false;
+  $("over").innerHTML="<h2>"+(m>a?"원정 성공!":a>m?"상대가 앞섰습니다":"무승부")+"</h2>"+
+    "<p>나 ★"+m+" · 상대 ★"+a+(S.me.done?" — 2019 도착 보너스 ★"+BONUS+" 포함":"")+
+    ". 10턴 동안 "+(S.me.pos)+"칸까지 나아갔습니다.</p>";
+  const b=document.createElement("button");
+  b.type="button"; b.textContent="다시 하기";
+  b.addEventListener("click",newGame);
+  $("over").appendChild(b);
+}
+
+$("btnRoll").addEventListener("click",roll);
+$("d1").addEventListener("click",()=>choose(0));
+$("d2").addEventListener("click",()=>choose(1));
+
+fetch(BASE+"data/cards.json").then(r=>r.json()).then(cs=>{
+  EV=cs.filter(c=>c.type==="event"&&c.year&&c.image).sort((x,y)=>x.year-y.year);
+  newGame();
+});
+</script>
