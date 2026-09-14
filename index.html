@@ -26,10 +26,23 @@ h1{font-family:var(--display);font-weight:400;font-size:clamp(1.35rem,4.6vw,2rem
 .sb b{font-family:var(--display);font-weight:400;font-size:1.25rem;font-variant-numeric:tabular-nums}
 .sb.me{background:var(--yellow);color:#14120c}
 .sb.ai{background:var(--blue);color:#14120c}
-.lead{margin:0;font-size:.86rem;color:var(--muted)}
 .nav{font-size:.78rem;font-weight:700;color:var(--ink);text-decoration:none;
   border:2px solid var(--edge);padding:3px 10px;background:var(--surface)}
 .nav:hover{background:var(--yellow);color:#14120c}
+
+/* 소개 */
+.intro{display:flex;flex-direction:column;gap:10px}
+.lede{margin:0;font-size:.92rem;line-height:1.62;max-width:68ch}
+.lede a{color:var(--ink)}
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+@media(max-width:620px){.how{grid-template-columns:1fr}}
+.step{background:var(--surface);border:3px solid var(--edge);box-shadow:4px 4px 0 var(--shadow);
+  padding:9px 12px;display:flex;gap:10px;align-items:flex-start;font-size:.84rem;line-height:1.42}
+.step b{font-family:var(--display);font-weight:400;font-size:1.35rem;line-height:.95;color:var(--muted);flex:none}
+.win{margin:0;font-size:.85rem;font-weight:700}
+.why{background:var(--surface);border:3px solid var(--edge);border-left:10px solid var(--gold);
+  box-shadow:4px 4px 0 var(--shadow);padding:10px 13px;font-size:.83rem;line-height:1.58;color:var(--muted)}
+.why b{color:var(--ink)}
 
 /* 말판 */
 .board{display:grid;grid-template-columns:repeat(9,1fr);gap:4px;background:var(--surface);padding:7px}
@@ -100,7 +113,19 @@ footer a{color:var(--muted)}
     <span class="sb me">나 ★<b id="sMe">0</b></span>
     <span class="sb ai">상대 ★<b id="sAi">0</b></span>
   </div>
-  <p class="lead">주사위 두 개를 굴려 <b>둘 중 하나를 골라</b> 전진합니다. 멈춘 칸의 사건 기록을 가져가고, 칸에 찍힌 <b>별</b>만큼 점수를 얻습니다. 10턴 뒤 별이 많은 쪽이 승리. <b>금색 칸</b>이 별 3개짜리 대박 칸입니다.</p>
+  <div class="intro">
+    <p class="lede">재단법인 숲과나눔 <a href="https://ecoarchive.org" target="_blank" rel="noopener">환경아카이브 풀숲</a>이 소장한 한국 환경운동 사건 기록 <b>45건(1978–2019)</b>으로 만든 주사위 말판 게임입니다. 온산병 사태에서 시작해 기후위기 대응까지, 40년을 한 판에 지나갑니다. 상대와 둘이서, 10분.</p>
+
+    <div class="how">
+      <div class="step"><b>1</b><span>주사위 <b>두 개</b>를 굴립니다.</span></div>
+      <div class="step"><b>2</b><span><b>둘 중 하나</b>를 골라 그만큼 전진합니다.</span></div>
+      <div class="step"><b>3</b><span>멈춘 칸의 사건 기록을 가져가고 <b>별</b>만큼 점수를 얻습니다.</span></div>
+    </div>
+
+    <p class="win">10턴 뒤 별이 많은 쪽이 승리합니다. 2019까지 완주하면 별 5개 보너스.</p>
+
+    <div class="why"><b>칸의 별은 지어낸 숫자가 아닙니다.</b> 그 사건에 실제로 남아 있는 기록 수입니다 — <b>★★★</b> 500건 이상(6칸) · <b>★★</b> 100–499건(21칸) · <b>★</b> 100건 미만(18칸). 그래서 금색 칸 여섯은 한국 환경운동에서 기록이 가장 많이 남은 사건들입니다. 큰 눈으로 멀리 갈지, 작은 눈으로 금색 칸에 정확히 멈출지가 매 턴 갈립니다.</div>
+  </div>
 
   <div class="board hard" id="board"></div>
 
@@ -118,7 +143,7 @@ footer a{color:var(--muted)}
   <footer>
     데이터: 재단법인 숲과나눔 <a href="https://ecoarchive.org" target="_blank" rel="noopener">환경아카이브 풀숲</a> ·
     <a href="https://archivelabedu.github.io/ecoarchive-impact2026/" target="_blank" rel="noopener">풀숲 데이터 랩</a> (CC BY 4.0).
-    칸의 별은 그 사건의 실제 관련 기록 수입니다 — ★★★ 500건 이상(6칸) · ★★ 100–499건(21칸) · ★ 100건 미만(18칸).
+    사건 기록의 사진과 본문 권리는 각 기증주체와 재단법인 숲과나눔에 있으며, 카드에서 각 기록의 풀숲 원본으로 이동할 수 있습니다.
   </footer>
 </div>
 
