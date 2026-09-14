@@ -5,7 +5,7 @@
 <style>
 :root{
   --ink:#14120c; --paper:#f7f2e4; --surface:#fffdf6; --edge:#14120c; --muted:#6e6858;
-  --yellow:#ffe95a; --pink:#ff6b8b; --green:#57c97a; --red:#ff5a4e; --blue:#9ee6ff;
+  --yellow:#ffe95a; --pink:#ff6b8b; --green:#57c97a; --red:#ff5a4e; --blue:#9ee6ff; --gold:#ffb43d;
   --shadow:#14120c;
   --display:"Black Han Sans","Gothic A1","Malgun Gothic",sans-serif;
   --body:"Gothic A1","Malgun Gothic",system-ui,sans-serif;
@@ -32,10 +32,23 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);
   font-size:.82rem;display:flex;align-items:center;gap:6px;box-shadow:3px 3px 0 var(--shadow)}
 .pill b{font-family:var(--display);font-weight:400;font-size:1.15rem;font-variant-numeric:tabular-nums}
 .pill.hearts{background:var(--pink);color:#14120c;letter-spacing:2px}
-.lead{font-size:.88rem;color:var(--muted);margin:0}
 .nav{font-size:.78rem;font-weight:700;color:var(--ink);text-decoration:none;
   border:2px solid var(--edge);padding:3px 10px;background:var(--surface)}
 .nav:hover{background:var(--yellow);color:#14120c}
+
+/* 소개 */
+.intro{display:flex;flex-direction:column;gap:10px}
+.lede{margin:0;font-size:.92rem;line-height:1.62;max-width:68ch}
+.lede a{color:var(--ink)}
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+@media(max-width:620px){.how{grid-template-columns:1fr}}
+.step{background:var(--surface);border:3px solid var(--edge);box-shadow:4px 4px 0 var(--shadow);
+  padding:9px 12px;display:flex;gap:10px;align-items:flex-start;font-size:.84rem;line-height:1.42}
+.step b{font-family:var(--display);font-weight:400;font-size:1.35rem;line-height:.95;color:var(--muted);flex:none}
+.win{margin:0;font-size:.85rem;font-weight:700}
+.why{background:var(--surface);border:3px solid var(--edge);border-left:10px solid var(--gold);
+  box-shadow:4px 4px 0 var(--shadow);padding:10px 13px;font-size:.83rem;line-height:1.58;color:var(--muted)}
+.why b{color:var(--ink)}
 
 /* ── 진행 트랙 ── */
 .track{display:flex;gap:3px;border:3px solid var(--edge);background:var(--surface);
@@ -110,7 +123,19 @@ footer a{color:var(--muted)}
     <span class="pill">최고 <b id="best">0</b></span>
     <span class="pill hearts" id="hearts">♥♥♥</span>
   </div>
-  <p class="lead">환경아카이브 풀숲의 사건 기록 45건으로 겨룹니다. <b>오른쪽 사건이 왼쪽보다 먼저 일어났는지 나중인지</b>만 고르면 됩니다.</p>
+  <div class="intro">
+    <p class="lede">재단법인 숲과나눔 <a href="https://ecoarchive.org" target="_blank" rel="noopener">환경아카이브 풀숲</a>이 소장한 한국 환경운동 사건 기록 <b>45건(1978–2019)</b>으로 하는 연도 맞히기입니다. 버튼 두 개만 쓰면 되고, 혼자 5분이면 한 판입니다.</p>
+
+    <div class="how">
+      <div class="step"><b>1</b><span>사건 카드 두 장이 나옵니다. <b>왼쪽</b>은 연도가 공개되어 있습니다.</span></div>
+      <div class="step"><b>2</b><span><b>오른쪽</b>이 왼쪽보다 먼저인지 나중인지 고릅니다.</span></div>
+      <div class="step"><b>3</b><span>맞히면 오른쪽이 새 기준이 되어 계속 이어집니다.</span></div>
+    </div>
+
+    <p class="win">목숨 세 개로 45칸 완주에 도전합니다. 연속 정답 최고 기록이 남습니다.</p>
+
+    <div class="why"><b>연도는 지어낸 값이 아닙니다.</b> 풀숲이 각 기록에 남겨둔 실제 발생 연도입니다. 1978년 온산병 사태에서 2019년 기후위기 대응까지 40년이 덱에 들어 있습니다. 같은 해에 일어난 두 사건이 걸리면 어느 쪽을 골라도 정답 처리하니 억울할 일은 없습니다. 답을 확인할 때마다 그 사건의 기록 설명과 풀숲 원본 링크가 함께 열립니다.</div>
+  </div>
 
   <div class="track" id="track"></div>
 

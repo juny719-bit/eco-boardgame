@@ -5,7 +5,7 @@
 <style>
 :root{
   --ink:#14120c;--paper:#f6f1e2;--surface:#fffdf6;--edge:#14120c;--muted:#6e6858;
-  --yellow:#ffe95a;--green:#57c97a;--red:#ff5a4e;--shadow:#14120c;
+  --yellow:#ffe95a;--green:#57c97a;--red:#ff5a4e;--gold:#ffb43d;--shadow:#14120c;
   --display:"Black Han Sans","Gothic A1","Malgun Gothic",sans-serif;
   --body:"Gothic A1","Malgun Gothic",system-ui,sans-serif;
 }
@@ -29,7 +29,19 @@ h1{font-family:var(--display);font-weight:400;font-size:clamp(1.35rem,4.6vw,2rem
   font-size:.8rem;display:flex;align-items:center;gap:6px;box-shadow:3px 3px 0 var(--shadow)}
 .sb b{font-family:var(--display);font-weight:400;font-size:1.2rem;font-variant-numeric:tabular-nums}
 .sb.hit{background:var(--yellow);color:#14120c}
-.lead{margin:0;font-size:.87rem;color:var(--muted)}
+/* 소개 */
+.intro{display:flex;flex-direction:column;gap:10px}
+.lede{margin:0;font-size:.92rem;line-height:1.62;max-width:68ch}
+.lede a{color:var(--ink)}
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+@media(max-width:620px){.how{grid-template-columns:1fr}}
+.step{background:var(--surface);border:3px solid var(--edge);box-shadow:4px 4px 0 var(--shadow);
+  padding:9px 12px;display:flex;gap:10px;align-items:flex-start;font-size:.84rem;line-height:1.42}
+.step b{font-family:var(--display);font-weight:400;font-size:1.35rem;line-height:.95;color:var(--muted);flex:none}
+.win{margin:0;font-size:.85rem;font-weight:700}
+.why{background:var(--surface);border:3px solid var(--edge);border-left:10px solid var(--gold);
+  box-shadow:4px 4px 0 var(--shadow);padding:10px 13px;font-size:.83rem;line-height:1.58;color:var(--muted)}
+.why b{color:var(--ink)}
 
 /* 뽑은 카드 */
 .card{display:grid;grid-template-columns:168px 1fr;background:var(--surface);overflow:hidden;min-height:132px}
@@ -87,7 +99,19 @@ footer a{color:var(--muted)}
     <span class="sb">문제 <b id="turn">1</b>/15</span>
     <span class="sb hit">맞힘 <b id="hit">0</b></span>
   </div>
-  <p class="lead">사건 카드를 한 장 뽑았습니다. 이 사건은 <b>어느 주제</b>일까요? 타일을 눌러 카드를 올리면 바로 정답을 알려드립니다. 15문제를 풉니다.</p>
+  <div class="intro">
+    <p class="lede">재단법인 숲과나눔 <a href="https://ecoarchive.org" target="_blank" rel="noopener">환경아카이브 풀숲</a>이 소장한 한국 환경운동 사건 기록 <b>45건(1978–2019)</b>으로 하는 주제 맞히기입니다. 사진과 사건명만 보고 짐작하면 되고, 혼자 5분이면 한 판입니다.</p>
+
+    <div class="how">
+      <div class="step"><b>1</b><span>사건 카드를 <b>한 장</b> 뽑습니다.</span></div>
+      <div class="step"><b>2</b><span><b>어느 주제</b>인지 골라 그 타일에 올립니다.</span></div>
+      <div class="step"><b>3</b><span>정답 타일이 초록으로 켜지고 기록 설명이 열립니다.</span></div>
+    </div>
+
+    <p class="win">15문제를 풀고 정답률을 봅니다.</p>
+
+    <div class="why"><b>주제 아홉 개는 풀숲이 직접 붙인 분류입니다.</b> 그래서 타일마다 카드 수가 크게 다릅니다 — 생태계보전이 19장인 반면 자원순환·대기오염은 각각 1장뿐입니다. 막히면 생태계보전을 찍는 게 확률로는 낫지만, 그만큼 한국 환경운동이 개발 저지와 서식지 보전에 얼마나 기울어 있었는지가 드러납니다. 각 타일에 적힌 카드 수를 보면서 고르세요.</div>
+  </div>
 
   <div class="card hard" id="card"></div>
   <div class="tiles" id="tiles"></div>
