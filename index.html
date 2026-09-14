@@ -1,11 +1,11 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>환경아카이브 보드게임</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<title>기록 원정대</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gothic+A1:wght@400;500;700;900&display=swap">
 <style>
 :root{
-  --ink:#14120c;--paper:#f6f1e2;--surface:#fffdf6;--edge:#14120c;--muted:#6e6858;
-  --yellow:#ffe95a;--blue:#9ee6ff;--gold:#ffb43d;--shadow:#14120c;
+  --ink:#14120c; --paper:#f6f1e2; --surface:#fffdf6; --edge:#14120c; --muted:#6e6858;
+  --yellow:#ffe95a; --blue:#9ee6ff; --gold:#ffb43d; --green:#b8f2a0; --shadow:#14120c;
   --display:"Black Han Sans","Gothic A1","Malgun Gothic",sans-serif;
   --body:"Gothic A1","Malgun Gothic",system-ui,sans-serif;
 }
@@ -14,76 +14,266 @@
 }
 :root[data-theme="dark"]{--ink:#f5f0e0;--paper:#15140e;--surface:#221f16;--edge:#f5f0e0;--muted:#9c947e;--shadow:#000}
 *{box-sizing:border-box}
-body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:15px;
-  line-height:1.55;padding-inline:18px;padding-block:30px 50px}
-.wrap{max-width:940px;margin:0 auto;display:flex;flex-direction:column;gap:26px}
-header{display:flex;flex-direction:column;gap:9px;max-width:60ch}
-.eyebrow{font-size:.68rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
-h1{font-family:var(--display);font-weight:400;font-size:clamp(1.9rem,6vw,2.9rem);margin:0;line-height:1.02}
-header p{margin:0;color:var(--muted);font-size:.94rem}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
-.g{display:flex;flex-direction:column;gap:9px;padding:16px;text-decoration:none;color:inherit;
-  background:var(--surface);border:3px solid var(--edge);box-shadow:6px 6px 0 var(--shadow);transition:transform .12s}
-.g:hover{transform:translate(-3px,-3px);box-shadow:9px 9px 0 var(--shadow)}
-.g .tag{font-size:.64rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
-.g h2{font-family:var(--display);font-weight:400;font-size:1.4rem;margin:0;line-height:1.1}
-.g .rule{font-size:.85rem;margin:0}
-.g .spec{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto;padding-top:4px}
-.g .spec span{font-size:.68rem;font-weight:700;border:2px solid var(--edge);padding:1px 7px}
-.g.a .spec span:first-child{background:var(--gold);color:#14120c}
-.g.b .spec span:first-child{background:var(--yellow);color:#14120c}
-.g.c .spec span:first-child{background:var(--blue);color:#14120c}
-h3{font-family:var(--display);font-weight:400;font-size:1.15rem;margin:0 0 10px}
-footer{border-top:2px dotted var(--muted);padding-top:14px;font-size:.75rem;color:var(--muted);line-height:1.7}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);
+  font-size:15px;line-height:1.5;padding-inline:14px;padding-block:16px 34px}
+.wrap{max-width:960px;margin:0 auto;display:flex;flex-direction:column;gap:13px}
+.hard{border:3px solid var(--edge);box-shadow:5px 5px 0 var(--shadow)}
+
+h1{font-family:var(--display);font-weight:400;font-size:clamp(1.35rem,4.6vw,2rem);margin:0;line-height:1}
+.top{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.top .sp{flex:1}
+.sb{background:var(--surface);padding:4px 12px;font-weight:700;font-size:.8rem;display:flex;align-items:center;gap:7px}
+.sb b{font-family:var(--display);font-weight:400;font-size:1.25rem;font-variant-numeric:tabular-nums}
+.sb.me{background:var(--yellow);color:#14120c}
+.sb.ai{background:var(--blue);color:#14120c}
+.lead{margin:0;font-size:.86rem;color:var(--muted)}
+.nav{font-size:.78rem;font-weight:700;color:var(--ink);text-decoration:none;
+  border:2px solid var(--edge);padding:3px 10px;background:var(--surface)}
+.nav:hover{background:var(--yellow);color:#14120c}
+
+/* 말판 */
+.board{display:grid;grid-template-columns:repeat(9,1fr);gap:4px;background:var(--surface);padding:7px}
+.cell{position:relative;aspect-ratio:1;border:2px solid var(--edge);background:var(--paper);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;overflow:hidden;min-width:0}
+.cell .y{font-size:clamp(8px,1.5vw,11px);font-weight:700;font-variant-numeric:tabular-nums;line-height:1}
+.cell .st{display:flex;gap:1px}
+.cell .st i{width:4px;height:4px;border-radius:50%;background:var(--muted);display:block}
+.cell.s3{background:var(--gold)}
+.cell.s3 .y{color:#14120c}.cell.s3 .st i{background:#14120c}
+.cell.s2{background:var(--green)}
+.cell.s2 .y{color:#14120c}.cell.s2 .st i{background:#14120c}
+.cell.fin{background:var(--edge)}
+.cell.fin .y{color:var(--paper)}
+.pawns{position:absolute;inset:auto 0 1px 0;display:flex;justify-content:center;gap:2px}
+.pw{width:9px;height:9px;border-radius:50%;border:2px solid var(--edge)}
+.pw.me{background:#ffd400}.pw.ai{background:#3fb8e0}
+.cell.hit{outline:3px solid var(--gold);outline-offset:-3px}
+
+/* 주사위 */
+.roll{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}
+.die{font-family:var(--display);font-weight:400;font-size:2.1rem;line-height:1;
+  border:3px solid var(--edge);background:var(--surface);color:var(--ink);
+  width:76px;height:76px;cursor:pointer;box-shadow:4px 4px 0 var(--shadow);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
+.die small{font-family:var(--body);font-size:.58rem;font-weight:700;color:var(--muted)}
+.die:hover:not(:disabled){background:var(--yellow);color:#14120c}
+.die:hover:not(:disabled) small{color:#14120c}
+.die:active:not(:disabled){transform:translate(3px,3px);box-shadow:1px 1px 0 var(--shadow)}
+.die:disabled{opacity:.35;cursor:default}
+.die:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.go{font-family:var(--display);font-weight:400;font-size:1.25rem;border:3px solid var(--edge);
+  background:var(--yellow);color:#14120c;padding:0 26px;cursor:pointer;box-shadow:4px 4px 0 var(--shadow)}
+.go:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--shadow)}
+.go:disabled{opacity:.35;cursor:default}
+.hint{align-self:center;font-size:.82rem;color:var(--muted);flex:1;min-width:160px}
+
+/* 카드 */
+.card{display:grid;grid-template-columns:150px 1fr;gap:0;background:var(--surface);overflow:hidden;min-height:126px}
+@media(max-width:560px){.card{grid-template-columns:104px 1fr}}
+.card img{width:100%;height:100%;object-fit:cover;display:block;border-right:3px solid var(--edge)}
+.card .tx{padding:10px 13px;display:flex;flex-direction:column;gap:5px;min-width:0}
+.card .hd{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+.card .yr{font-family:var(--display);font-weight:400;font-size:1.5rem;line-height:1;font-variant-numeric:tabular-nums}
+.card .nm{font-weight:700;font-size:.97rem;line-height:1.25}
+.card .stars{font-family:var(--display);font-weight:400;font-size:1.05rem;color:#c98207;letter-spacing:1px}
+.card p{margin:0;font-size:.79rem;color:var(--muted);line-height:1.5}
+.card a{color:var(--ink);font-weight:700;font-size:.76rem}
+.card.empty{align-items:center;justify-content:center;grid-template-columns:1fr;padding:18px;text-align:center;color:var(--muted);font-size:.86rem}
+
+.over{background:var(--yellow);color:#14120c;padding:15px;display:flex;flex-direction:column;gap:7px}
+.over[hidden]{display:none}
+.over h2{font-family:var(--display);font-weight:400;font-size:1.6rem;margin:0;line-height:1.1}
+.over p{margin:0;font-size:.87rem}
+.over button{align-self:flex-start;font-family:var(--display);font-weight:400;font-size:1.1rem;
+  border:3px solid #14120c;background:#fffdf6;color:#14120c;padding:7px 20px;cursor:pointer;box-shadow:4px 4px 0 #14120c}
+footer{font-size:.71rem;color:var(--muted);line-height:1.6;border-top:2px dotted var(--muted);padding-top:10px}
 footer a{color:var(--muted)}
-</style></head><body>
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
 <div class="wrap">
-  <header>
-    <div class="eyebrow">환경아카이브 풀숲 데이터 기반</div>
-    <h1>환경아카이브 보드게임</h1>
-    <p>재단법인 숲과나눔 <a href="https://ecoarchive.org">환경아카이브 풀숲</a>이 소장한 한국 환경운동 사건 기록 45건(1978–2019)으로 만든 게임 모음입니다. 카드 덱은 <a href="https://archivelabedu.github.io/ecoarchive-impact2026/">풀숲 데이터 랩</a>에서 실시간으로 읽어옵니다.</p>
-  </header>
+  <div class="top">
+    <h1>기록 원정대</h1>
+    <a class="nav" href="games.html">다른 게임 →</a>
+    <span class="sp"></span>
+    <span class="sb">턴 <b id="turn">1</b>/10</span>
+    <span class="sb me">나 ★<b id="sMe">0</b></span>
+    <span class="sb ai">상대 ★<b id="sAi">0</b></span>
+  </div>
+  <p class="lead">주사위 두 개를 굴려 <b>둘 중 하나를 골라</b> 전진합니다. 멈춘 칸의 사건 기록을 가져가고, 칸에 찍힌 <b>별</b>만큼 점수를 얻습니다. 10턴 뒤 별이 많은 쪽이 승리. <b>금색 칸</b>이 별 3개짜리 대박 칸입니다.</p>
 
-  <section>
-    <h3>웹에서 바로 하기</h3>
-    <div class="grid">
-      <a class="g a" href="dice-expedition.html">
-        <span class="tag">주사위 말판</span>
-        <h2>기록 원정대</h2>
-        <p class="rule">주사위 두 개를 굴려 둘 중 하나를 골라 전진합니다. 멈춘 칸의 별만큼 점수를 얻고, 10턴 뒤 별이 많은 쪽이 승리.</p>
-        <div class="spec"><span>2인</span><span>10분</span><span>45칸</span></div>
-      </a>
-      <a class="g b" href="timeline-duel.html">
-        <span class="tag">연도 맞히기</span>
-        <h2>먼저일까 나중일까</h2>
-        <p class="rule">두 사건 중 어느 쪽이 먼저인지만 고릅니다. 맞히면 계속 이어지고, 목숨 셋으로 45칸 완주에 도전합니다.</p>
-        <div class="spec"><span>1인</span><span>5분</span><span>버튼 2개</span></div>
-      </a>
-    </div>
-  </section>
+  <div class="board hard" id="board"></div>
 
-  <section>
-    <h3>인쇄해서 하기</h3>
-    <div class="grid">
-      <a class="g c" href="board/tile-board.html">
-        <span class="tag">A4 인쇄용 보드</span>
-        <h2>기록 타일</h2>
-        <p class="rule">카드를 뒤집어 어느 주제인지 맞히고 그 타일에 올립니다. 보드·규칙·카드 자리가 A4 한 장에 모두 들어갑니다.</p>
-        <div class="spec"><span>2–4인</span><span>15분</span><span>A4 1장</span></div>
-      </a>
-      <a class="g c" href="board/concepts.html">
-        <span class="tag">디자인 기록</span>
-        <h2>보드 시안 3종</h2>
-        <p class="rule">손그림 트랙 · 파스텔 타일 · 빈티지 도해 세 방향을 A4로 비교한 시안입니다. 위 인쇄용 보드는 두 번째 방향을 다듬은 것입니다.</p>
-        <div class="spec"><span>참고</span><span>A4 3장</span></div>
-      </a>
-    </div>
-  </section>
+  <div class="roll">
+    <button class="go" id="btnRoll" type="button">주사위 굴리기</button>
+    <button class="die" id="d1" type="button" disabled>–<small>선택</small></button>
+    <button class="die" id="d2" type="button" disabled>–<small>선택</small></button>
+    <span class="hint" id="hint">굴린 뒤 두 눈 중 하나를 고르세요.</span>
+  </div>
+
+  <div class="card hard empty" id="card">멈춘 칸의 사건 기록이 여기에 열립니다.</div>
+
+  <div class="over hard" id="over" hidden></div>
 
   <footer>
-    데이터: 재단법인 숲과나눔 <a href="https://ecoarchive.org">환경아카이브 풀숲</a> · <a href="https://archivelabedu.github.io/ecoarchive-impact2026/">풀숲 데이터 랩</a> (CC BY 4.0).
-    사건 기록의 사진과 본문 권리는 각 기증주체와 재단법인 숲과나눔에 있으며, 게임 안에서 각 기록의 풀숲 원본으로 이동할 수 있습니다.
-    게임 코드는 MIT 라이선스입니다.
+    데이터: 재단법인 숲과나눔 <a href="https://ecoarchive.org" target="_blank" rel="noopener">환경아카이브 풀숲</a> ·
+    <a href="https://archivelabedu.github.io/ecoarchive-impact2026/" target="_blank" rel="noopener">풀숲 데이터 랩</a> (CC BY 4.0).
+    칸의 별은 그 사건의 실제 관련 기록 수입니다 — ★★★ 500건 이상(6칸) · ★★ 100–499건(21칸) · ★ 100건 미만(18칸).
   </footer>
 </div>
-</body></html>
+
+<script>
+// 데이터는 풀숲 데이터 랩에서 직접 읽습니다 (CC BY 4.0). 카드 덱이 갱신되면 게임도 따라갑니다.
+const BASE="https://archivelabedu.github.io/ecoarchive-impact2026/";
+const TURNS=10, LAST=45, BONUS=5;
+const $=id=>document.getElementById(id);
+const RM=matchMedia("(prefers-reduced-motion:reduce)").matches;
+const star=c=>c>=500?3:c>=100?2:1;
+const esc=s=>String(s??"").replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
+const wait=ms=>new Promise(r=>setTimeout(r,RM?0:ms));
+
+let EV=[], S=null, busy=false;
+
+function newGame(){
+  S={me:{pos:0,star:0,done:false},ai:{pos:0,star:0,done:false},turn:1,dice:null,over:false};
+  $("over").hidden=true;
+  $("card").className="card hard empty";
+  $("card").textContent="멈춘 칸의 사건 기록이 여기에 열립니다.";
+  $("hint").textContent="굴린 뒤 두 눈 중 하나를 고르세요.";
+  drawBoard(); paint(); armRoll();
+}
+
+function drawBoard(){
+  let h="";
+  for(let i=0;i<LAST;i++){
+    const e=EV[i],st=star(e.count||0);
+    const cls="cell"+(st===3?" s3":st===2?" s2":"")+(i===LAST-1?" fin":"");
+    h+='<div class="'+cls+'" id="c'+i+'"><span class="y">'+e.year+'</span>'+
+       '<span class="st">'+'<i></i>'.repeat(st)+'</span><span class="pawns" id="p'+i+'"></span></div>';
+  }
+  $("board").innerHTML=h;
+}
+
+function paint(){
+  $("turn").textContent=Math.min(S.turn,TURNS);
+  $("sMe").textContent=S.me.star;
+  $("sAi").textContent=S.ai.star;
+  for(let i=0;i<LAST;i++) $("p"+i).innerHTML="";
+  if(S.me.pos>0) $("p"+(S.me.pos-1)).insertAdjacentHTML("beforeend",'<span class="pw me"></span>');
+  if(S.ai.pos>0) $("p"+(S.ai.pos-1)).insertAdjacentHTML("beforeend",'<span class="pw ai"></span>');
+}
+
+function armRoll(){
+  $("btnRoll").disabled=S.over||S.me.done;
+  $("d1").disabled=true; $("d2").disabled=true;
+  $("d1").firstChild.nodeValue="–"; $("d2").firstChild.nodeValue="–";
+  if(S.me.done&&!S.over) $("hint").textContent="이미 2019에 도착했습니다. 상대의 남은 턴을 지켜보세요.";
+}
+
+async function roll(){
+  if(busy||S.over) return;
+  busy=true; $("btnRoll").disabled=true;
+  const a=1+Math.floor(Math.random()*6), b=1+Math.floor(Math.random()*6);
+  for(let k=0;k<(RM?1:8);k++){
+    $("d1").firstChild.nodeValue=1+Math.floor(Math.random()*6);
+    $("d2").firstChild.nodeValue=1+Math.floor(Math.random()*6);
+    await wait(55);
+  }
+  $("d1").firstChild.nodeValue=a; $("d2").firstChild.nodeValue=b;
+  S.dice=[a,b];
+  $("d1").disabled=false; $("d2").disabled=false;
+  $("hint").textContent="두 눈 중 하나를 골라 그만큼 전진합니다.";
+  busy=false;
+}
+
+async function step(who,n){
+  const P=S[who];
+  for(let k=0;k<n&&P.pos<LAST;k++){ P.pos++; paint(); await wait(95); }
+  if(P.pos>LAST) P.pos=LAST;
+}
+
+async function choose(idx){
+  if(busy||S.over||S.dice===null) return;
+  busy=true;
+  $("d1").disabled=true; $("d2").disabled=true;
+  const n=S.dice[idx]; S.dice=null;
+
+  await step("me",n);
+  const e=EV[S.me.pos-1];
+  S.me.star+=star(e.count||0);
+  showCard(e,"나");
+  flash(S.me.pos-1);
+  if(S.me.pos>=LAST){ S.me.done=true; S.me.star+=BONUS; }
+  paint();
+
+  await wait(620);
+  await aiTurn();
+
+  if(S.turn>=TURNS){ finish(); } else { S.turn++; paint(); armRoll(); }
+  busy=false;
+}
+
+async function aiTurn(){
+  const A=S.ai;
+  if(A.done) return;
+  const a=1+Math.floor(Math.random()*6), b=1+Math.floor(Math.random()*6);
+  // 남은 턴으로 완주가 가능하면 큰 눈, 아니면 별이 큰 칸
+  const left=TURNS-S.turn;
+  const val=n=>{
+    const p=Math.min(LAST,A.pos+n);
+    let v=star(EV[p-1].count||0);
+    if(p>=LAST) v+=BONUS;
+    else if(left*6>=LAST-p) v+=n*0.28;
+    return v;
+  };
+  const n=val(a)>=val(b)?a:b;
+  await step("ai",n);
+  const e=EV[A.pos-1];
+  A.star+=star(e.count||0);
+  flash(A.pos-1);
+  if(A.pos>=LAST){ A.done=true; A.star+=BONUS; }
+  $("hint").textContent="상대는 "+n+"칸 이동해 "+e.year+" "+e.front+"에 멈췄습니다.";
+  paint();
+  await wait(420);
+}
+
+function flash(i){
+  const el=$("c"+i); if(!el) return;
+  el.classList.add("hit"); setTimeout(()=>el.classList.remove("hit"),780);
+}
+
+function showCard(e,who){
+  const st=star(e.count||0);
+  $("card").className="card hard";
+  $("card").innerHTML='<img src="'+BASE+'games/'+e.image+'" alt="" decoding="async">'+
+    '<div class="tx"><div class="hd"><span class="yr">'+e.year+'</span>'+
+    '<span class="nm">'+esc(e.front)+'</span>'+
+    '<span class="stars">'+"★".repeat(st)+'</span></div>'+
+    '<p>'+esc((e.back||"").slice(0,120))+((e.back||"").length>120?"…":"")+'</p>'+
+    '<p>관련 기록 '+(e.count||0).toLocaleString("ko-KR")+'건 · '+who+' 획득 ★'+st+
+    ' <a href="'+e.url+'" target="_blank" rel="noopener">풀숲 원본 ↗</a></p></div>';
+}
+
+function finish(){
+  S.over=true;
+  $("btnRoll").disabled=true; $("d1").disabled=true; $("d2").disabled=true;
+  const m=S.me.star,a=S.ai.star;
+  $("over").hidden=false;
+  $("over").innerHTML="<h2>"+(m>a?"원정 성공!":a>m?"상대가 앞섰습니다":"무승부")+"</h2>"+
+    "<p>나 ★"+m+" · 상대 ★"+a+(S.me.done?" — 2019 도착 보너스 ★"+BONUS+" 포함":"")+
+    ". 10턴 동안 "+(S.me.pos)+"칸까지 나아갔습니다.</p>";
+  const b=document.createElement("button");
+  b.type="button"; b.textContent="다시 하기";
+  b.addEventListener("click",newGame);
+  $("over").appendChild(b);
+}
+
+$("btnRoll").addEventListener("click",roll);
+$("d1").addEventListener("click",()=>choose(0));
+$("d2").addEventListener("click",()=>choose(1));
+
+fetch(BASE+"data/cards.json").then(r=>r.json()).then(cs=>{
+  EV=cs.filter(c=>c.type==="event"&&c.year&&c.image).sort((x,y)=>x.year-y.year);
+  newGame();
+});
+</script>
