@@ -1,0 +1,280 @@
+<title>먼저일까 나중일까</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gothic+A1:wght@400;500;700;900&display=swap">
+<style>
+:root{
+  --ink:#14120c; --paper:#f7f2e4; --surface:#fffdf6; --edge:#14120c; --muted:#6e6858;
+  --yellow:#ffe95a; --pink:#ff6b8b; --green:#57c97a; --red:#ff5a4e; --blue:#9ee6ff;
+  --shadow:#14120c;
+  --display:"Black Han Sans","Gothic A1","Malgun Gothic",sans-serif;
+  --body:"Gothic A1","Malgun Gothic",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ink:#f5f0e0; --paper:#15140e; --surface:#221f16; --edge:#f5f0e0; --muted:#9c947e; --shadow:#000;
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#f5f0e0; --paper:#15140e; --surface:#221f16; --edge:#f5f0e0; --muted:#9c947e; --shadow:#000;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);
+  font-size:15px;line-height:1.5;padding-inline:16px;padding-block:16px 32px}
+.wrap{max-width:880px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+
+/* ── 상단 ── */
+.hud{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.hud h1{font-family:var(--display);font-weight:400;font-size:clamp(1.3rem,4.5vw,1.9rem);
+  margin:0;letter-spacing:-.01em;line-height:1}
+.hud .sp{flex:1}
+.pill{border:3px solid var(--edge);background:var(--surface);padding:3px 11px;font-weight:700;
+  font-size:.82rem;display:flex;align-items:center;gap:6px;box-shadow:3px 3px 0 var(--shadow)}
+.pill b{font-family:var(--display);font-weight:400;font-size:1.15rem;font-variant-numeric:tabular-nums}
+.pill.hearts{background:var(--pink);color:#14120c;letter-spacing:2px}
+.lead{font-size:.88rem;color:var(--muted);margin:0}
+
+/* ── 진행 트랙 ── */
+.track{display:flex;gap:3px;border:3px solid var(--edge);background:var(--surface);
+  padding:5px;box-shadow:4px 4px 0 var(--shadow)}
+.tick{flex:1;height:15px;background:var(--paper);border:1px solid var(--edge);opacity:.35}
+.tick.on{background:var(--green);opacity:1}
+.tick.now{background:var(--yellow);opacity:1;transform:scaleY(1.5)}
+
+/* ── 카드 ── */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:stretch}
+@media(max-width:680px){.duel{grid-template-columns:1fr;gap:10px}}
+.card{background:var(--surface);border:3px solid var(--edge);box-shadow:6px 6px 0 var(--shadow);
+  display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.card .ph{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;border-bottom:3px solid var(--edge);background:var(--paper)}
+.card .cap{padding:9px 11px 11px;display:flex;flex-direction:column;gap:7px;flex:1}
+.nm{font-weight:700;font-size:.95rem;line-height:1.3;text-wrap:balance}
+.yr{font-family:var(--display);font-weight:400;font-size:2.5rem;line-height:1;
+  font-variant-numeric:tabular-nums;letter-spacing:.01em}
+.yr.q{color:var(--muted)}
+.role{font-size:.66rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.card.hit{border-color:var(--green);box-shadow:6px 6px 0 var(--green)}
+.card.miss{border-color:var(--red);box-shadow:6px 6px 0 var(--red)}
+
+/* ── 가운데 선택 ── */
+.mid{display:flex;flex-direction:column;justify-content:center;gap:8px;min-width:118px}
+@media(max-width:680px){.mid{flex-direction:row;min-width:0}}
+.pick{font-family:var(--display);font-weight:400;font-size:1.15rem;cursor:pointer;
+  border:3px solid var(--edge);background:var(--surface);color:var(--ink);
+  padding:14px 10px;box-shadow:4px 4px 0 var(--shadow);flex:1;line-height:1.15}
+.pick:hover:not(:disabled){background:var(--yellow);color:#14120c}
+.pick:active:not(:disabled){transform:translate(3px,3px);box-shadow:1px 1px 0 var(--shadow)}
+.pick:disabled{opacity:.4;cursor:default}
+.pick:focus-visible{outline:3px solid var(--pink);outline-offset:3px}
+.pick small{display:block;font-family:var(--body);font-weight:500;font-size:.66rem;color:var(--muted);margin-top:2px}
+
+/* ── 피드백 ── */
+.fb{border:3px solid var(--edge);background:var(--surface);box-shadow:5px 5px 0 var(--shadow);
+  padding:11px 13px;display:flex;flex-direction:column;gap:5px;min-height:84px}
+.fb.hit{background:#e9fbee}.fb.miss{background:#ffeeec}
+:root[data-theme="dark"] .fb.hit,:root:not([data-theme="light"]) .fb.hit{background:#1d2c20}
+:root[data-theme="dark"] .fb.miss,:root:not([data-theme="light"]) .fb.miss{background:#2e1a18}
+.fb .v{font-family:var(--display);font-weight:400;font-size:1.3rem;line-height:1}
+.fb .v.hit{color:#1f8a45}.fb .v.miss{color:#c9372c}
+:root[data-theme="dark"] .fb .v.hit,:root:not([data-theme="light"]) .fb .v.hit{color:#7fe09e}
+:root[data-theme="dark"] .fb .v.miss,:root:not([data-theme="light"]) .fb .v.miss{color:#ff8e84}
+.fb p{margin:0;font-size:.83rem;line-height:1.55;color:var(--muted)}
+.fb a{color:var(--ink);font-weight:700;font-size:.78rem}
+.fb .go{align-self:flex-start;margin-top:2px;font-family:var(--display);font-weight:400;font-size:1rem;
+  border:3px solid var(--edge);background:var(--yellow);color:#14120c;padding:6px 16px;cursor:pointer;box-shadow:3px 3px 0 var(--shadow)}
+.fb .go:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--shadow)}
+
+/* ── 종료 ── */
+.over{border:3px solid var(--edge);background:var(--yellow);color:#14120c;
+  box-shadow:6px 6px 0 var(--shadow);padding:16px;display:flex;flex-direction:column;gap:8px}
+.over[hidden]{display:none}
+.over h2{font-family:var(--display);font-weight:400;font-size:1.7rem;margin:0;line-height:1.1}
+.over p{margin:0;font-size:.87rem}
+.over button{align-self:flex-start;font-family:var(--display);font-weight:400;font-size:1.1rem;
+  border:3px solid #14120c;background:#fffdf6;color:#14120c;padding:8px 20px;cursor:pointer;box-shadow:4px 4px 0 #14120c}
+footer{font-size:.72rem;color:var(--muted);line-height:1.6;border-top:2px solid var(--muted);
+  border-top-style:dotted;padding-top:10px}
+footer a{color:var(--muted)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="wrap">
+  <div class="hud">
+    <h1>먼저일까 나중일까</h1>
+    <span class="sp"></span>
+    <span class="pill">연속 <b id="streak">0</b></span>
+    <span class="pill">최고 <b id="best">0</b></span>
+    <span class="pill hearts" id="hearts">♥♥♥</span>
+  </div>
+  <p class="lead">환경아카이브 풀숲의 사건 기록 45건으로 겨룹니다. <b>오른쪽 사건이 왼쪽보다 먼저 일어났는지 나중인지</b>만 고르면 됩니다.</p>
+
+  <div class="track" id="track"></div>
+
+  <div class="duel">
+    <div class="card" id="cL">
+      <img class="ph" id="imgL" alt="" decoding="async">
+      <div class="cap">
+        <span class="role">기준</span>
+        <span class="nm" id="nmL">—</span>
+        <span class="yr" id="yrL">—</span>
+      </div>
+    </div>
+
+    <div class="mid">
+      <button class="pick" id="bEarly" type="button">더 먼저<small>왼쪽보다 이전</small></button>
+      <button class="pick" id="bLate" type="button">더 나중<small>왼쪽보다 이후</small></button>
+    </div>
+
+    <div class="card" id="cR">
+      <img class="ph" id="imgR" alt="" decoding="async">
+      <div class="cap">
+        <span class="role">이 사건은?</span>
+        <span class="nm" id="nmR">—</span>
+        <span class="yr q" id="yrR">????</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="fb" id="fb">
+    <span class="v" id="fbv">고르면 바로 정답을 알려드립니다.</span>
+    <p id="fbp">왼쪽 카드의 연도는 공개되어 있습니다. 오른쪽 사건이 그보다 먼저인지 나중인지 찍어보세요. 같은 해면 무조건 정답입니다.</p>
+  </div>
+
+  <div class="over" id="over" hidden></div>
+
+  <footer>
+    데이터: 재단법인 숲과나눔 <a href="https://ecoarchive.org" target="_blank" rel="noopener">환경아카이브 풀숲</a> ·
+    <a href="https://archivelabedu.github.io/ecoarchive-impact2026/" target="_blank" rel="noopener">풀숲 데이터 랩</a> (CC BY 4.0).
+    사건명·연도·설명·사진은 풀숲 소장 기록에서 가져왔으며, 각 기록의 원본으로 이동할 수 있습니다.
+  </footer>
+</div>
+
+<script>
+// 데이터는 풀숲 데이터 랩에서 직접 읽습니다 (CC BY 4.0). 카드 덱이 갱신되면 게임도 따라갑니다.
+const BASE="https://archivelabedu.github.io/ecoarchive-impact2026/";
+const GOAL=45, LIVES=3;
+const $=id=>document.getElementById(id);
+const RM=matchMedia("(prefers-reduced-motion:reduce)").matches;
+let DECK=[], S=null, busy=false;
+
+function best(){ try{ return +(localStorage.getItem("pulsoop_duel_best")||0); }catch(e){ return 0; } }
+function setBest(v){ try{ localStorage.setItem("pulsoop_duel_best",v); }catch(e){} }
+
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function start(){
+  const p=shuffle(DECK);
+  S={pool:p, left:p.shift(), right:p.shift(), streak:0, lives:LIVES, step:0, done:false};
+  $("over").hidden=true;
+  paint(); ask();
+}
+
+function paint(){
+  $("streak").textContent=S.streak;
+  $("best").textContent=best();
+  $("hearts").textContent="♥".repeat(S.lives)+"♡".repeat(LIVES-S.lives);
+  let t="";
+  for(let i=0;i<GOAL;i++) t+='<span class="tick'+(i<S.step?" on":i===S.step?" now":"")+'"></span>';
+  $("track").innerHTML=t;
+}
+
+function ask(){
+  const L=S.left,R=S.right;
+  $("imgL").src=BASE+"games/"+L.image; $("nmL").textContent=L.front; $("yrL").textContent=L.year;
+  $("imgR").src=BASE+"games/"+R.image; $("nmR").textContent=R.front;
+  $("yrR").textContent="????"; $("yrR").classList.add("q");
+  $("cL").className="card"; $("cR").className="card";
+  $("bEarly").disabled=false; $("bLate").disabled=false;
+  busy=false;
+}
+
+function countUp(el,target){
+  if(RM){ el.textContent=target; return; }
+  const t0=performance.now(), from=1960+Math.floor(Math.random()*60);
+  (function tick(now){
+    const k=Math.min(1,(now-t0)/460);
+    el.textContent=Math.round(from+(target-from)*(1-Math.pow(1-k,3)));
+    if(k<1) requestAnimationFrame(tick); else el.textContent=target;
+  })(t0);
+}
+
+function praise(n){
+  if(n>=15) return "아카이브 마스터!";
+  if(n>=10) return "대단해요!";
+  if(n>=5)  return "잘하는데요!";
+  if(n>=3)  return "좋아요!";
+  return "정답!";
+}
+
+function answer(guessEarlier){
+  if(busy||S.done) return;
+  busy=true;
+  $("bEarly").disabled=true; $("bLate").disabled=true;
+
+  const L=S.left,R=S.right;
+  const tie=R.year===L.year;
+  const ok=tie || (guessEarlier ? R.year<L.year : R.year>L.year);
+
+  $("yrR").classList.remove("q");
+  countUp($("yrR"),R.year);
+
+  $("cR").className="card "+(ok?"hit":"miss");
+  $("fb").className="fb "+(ok?"hit":"miss");
+
+  if(ok){
+    S.streak++; S.step=Math.min(GOAL,S.step+1);
+    if(S.streak>best()) setBest(S.streak);
+  } else {
+    S.lives--; S.streak=0;
+  }
+  paint();
+
+  const rel = tie ? "두 사건 모두 "+R.year+"년" :
+    (R.year<L.year ? R.front+" 쪽이 "+(L.year-R.year)+"년 먼저" : R.front+" 쪽이 "+(R.year-L.year)+"년 나중");
+  const head = ok ? (tie?"같은 해! 정답 처리":praise(S.streak)) : "아쉽네요";
+
+  $("fbv").className="v "+(ok?"hit":"miss");
+  $("fbv").textContent=head+" — "+rel;
+  $("fbp").innerHTML=esc((R.back||"").slice(0,150))+(R.back&&R.back.length>150?"…":"")+
+    ' <a href="'+R.url+'" target="_blank" rel="noopener">풀숲 원본 ↗</a>';
+
+  const btn=document.createElement("button");
+  btn.className="go"; btn.type="button";
+  btn.textContent = (S.lives<=0||S.step>=GOAL) ? "결과 보기" : "다음";
+  btn.addEventListener("click",next);
+  $("fb").appendChild(btn);
+  btn.focus();
+}
+
+function next(){
+  document.querySelectorAll(".fb .go").forEach(b=>b.remove());
+  if(S.lives<=0||S.step>=GOAL){ finish(); return; }
+  if(!S.pool.length) S.pool=shuffle(DECK.filter(c=>c!==S.right));
+  S.left=S.right; S.right=S.pool.shift();
+  ask();
+}
+
+function finish(){
+  S.done=true;
+  const win=S.step>=GOAL;
+  $("over").hidden=false;
+  $("over").innerHTML="<h2>"+(win?"45칸 완주!":"여기까지!")+"</h2>"+
+    "<p>"+S.step+"칸 전진 · 최고 연속 정답 "+best()+"회"+
+    (win?" — 1978년부터 2019년까지 환경운동 40년을 완주했습니다.":" 목숨을 다 썼습니다. 다시 도전해 보세요.")+"</p>";
+  const b=document.createElement("button");
+  b.type="button"; b.textContent="다시 하기";
+  b.addEventListener("click",start);
+  $("over").appendChild(b);
+  b.focus();
+}
+
+function esc(s){return String(s??"").replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));}
+
+$("bEarly").addEventListener("click",()=>answer(true));
+$("bLate").addEventListener("click",()=>answer(false));
+
+fetch(BASE+"data/cards.json").then(r=>r.json()).then(cs=>{
+  DECK=cs.filter(c=>c.type==="event"&&c.year&&c.image);
+  start();
+});
+</script>
